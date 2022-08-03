@@ -31,7 +31,21 @@ class Physik():
         
     
     def TaleopPeriodic(self):
-        Trackbars.get_trackbar_pos(self)
+        Trackbars.trackbar_screen(self)
+        self.screenlineHeight_aralik = cv2.getTrackbarPos('Height','trackbarWindow')
+        self.screenlineWidth_aralik = cv2.getTrackbarPos('Width','trackbarWindow')
+        if self.screenlineHeight_aralik > 0:
+            pass
+        else:
+            self.screenlineHeight_aralik = 1
+        if self.screenlineWidth_aralik > 0:
+            pass
+        else:
+            self.screenlineWidth_aralik = 1
+        self.clear_img()
+        self.copy_img()
+        if cv2.getTrackbarPos('lines','trackbarWindow'):
+            extra_systems.mainLineWindow.createLines(self.mainWindow,self.ScreenWidth,self.ScreenHeight,self.screenlineWidth_aralik,self.screenlineHeight_aralik,self.font)
         cv2.imshow("mainWindow",self.mainWindow)
         if cv2.waitKey(1) == ord("q"):
             self.clear_img()
