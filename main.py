@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import extra_systems.mainLineWindow
 import time
+from extra_systems.trackbars import Trackbars
 print("Physik")
 
 class Physik():
@@ -22,7 +23,7 @@ class Physik():
     def clear_img(self):
         self.mainWindow = self.copied_image.copy()
     def CreateMainScreen(self):
-        
+        Trackbars.create_trackbars(self)
         self.mainWindow = np.zeros((self.ScreenHeight,self.ScreenWidth,3),np.uint8)
         self.copy_img()
         extra_systems.mainLineWindow.createLines(self.mainWindow,self.ScreenWidth,self.ScreenHeight,self.screenlineWidth_aralik,self.screenlineHeight_aralik,self.font)
@@ -30,8 +31,9 @@ class Physik():
         
     
     def TaleopPeriodic(self):
+        Trackbars.get_trackbar_pos(self)
         cv2.imshow("mainWindow",self.mainWindow)
-        if cv2.waitKey(1) == 27:
+        if cv2.waitKey(1) == ord("q"):
             self.clear_img()
 
 Physik()
