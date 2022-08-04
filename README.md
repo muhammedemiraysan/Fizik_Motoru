@@ -8,3 +8,7 @@ Yapılması Hedeflenenler:
 -Pencere açma kapama sistemi
 -Isı alışverişi sistemi
 -Vektörel Hareket Sistemi
+
+Yapılanlar:
+-Pyqt5 arayüz
+-Ölçü cetveli sistemi
