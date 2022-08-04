@@ -1,8 +1,10 @@
 import numpy as np
 import cv2
-import extra_systems.mainLineWindow
 import time
-from extra_systems.trackbars import Trackbars
+import extra_systems.mainLineWindow
+from arayuz.arayuz import Ui_MainWindow, MainWindow
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 print("Physik")
 
 class Physik():
@@ -13,7 +15,7 @@ class Physik():
         self.screenlineWidth_aralik = 100 #genişlik aralık değişkeni
         self.screenlineHeight_aralik = 100 #yükseklik aralık değişkeni
         self.font = cv2.FONT_HERSHEY_SIMPLEX
-        
+        Ui_MainWindow.setupUi(self,MainWindow)
         self.CreateMainScreen()
         while 1:
             self.TaleopPeriodic()    
@@ -22,8 +24,9 @@ class Physik():
         self.copied_image = self.mainWindow.copy()
     def clear_img(self):
         self.mainWindow = self.copied_image.copy()
+
     def CreateMainScreen(self):
-        Trackbars.create_trackbars(self)
+        Ui_MainWindow.retranslateUi(self,MainWindow)
         self.mainWindow = np.zeros((self.ScreenHeight,self.ScreenWidth,3),np.uint8)
         self.copy_img()
         extra_systems.mainLineWindow.createLines(self.mainWindow,self.ScreenWidth,self.ScreenHeight,self.screenlineWidth_aralik,self.screenlineHeight_aralik,self.font)
@@ -31,9 +34,12 @@ class Physik():
         
     
     def TaleopPeriodic(self):
-        Trackbars.trackbar_screen(self)
-        self.screenlineHeight_aralik = cv2.getTrackbarPos('Height','trackbarWindow')
-        self.screenlineWidth_aralik = cv2.getTrackbarPos('Width','trackbarWindow')
+        self.clear_img()
+        self.copy_img()
+
+        self.screenlineHeight_aralik = int(Ui_MainWindow.get_slider_xValue(self,MainWindow))
+        self.screenlineWidth_aralik = int(Ui_MainWindow.get_slider_yValue(self,MainWindow))
+
         if self.screenlineHeight_aralik > 0:
             pass
         else:
@@ -42,12 +48,13 @@ class Physik():
             pass
         else:
             self.screenlineWidth_aralik = 1
-        self.clear_img()
-        self.copy_img()
-        if cv2.getTrackbarPos('lines','trackbarWindow'):
+
+        if Ui_MainWindow.get_checkbox_Value(self,MainWindow):
             extra_systems.mainLineWindow.createLines(self.mainWindow,self.ScreenWidth,self.ScreenHeight,self.screenlineWidth_aralik,self.screenlineHeight_aralik,self.font)
+        
         cv2.imshow("mainWindow",self.mainWindow)
-        if cv2.waitKey(1) == ord("q"):
-            self.clear_img()
+        cv2.waitKey(1)
+        if Ui_MainWindow.get_quitbutton_Value(self,MainWindow):
+            exit()
 
 Physik()
